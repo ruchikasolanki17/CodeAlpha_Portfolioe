@@ -1,0 +1,54 @@
+# Hardcoded stock prices
+stock_prices = {
+    "AAPL": 180,
+    "TSLA": 250,
+    "GOOGL": 2800,
+    "AMZN": 135,
+    "MSFT": 330
+}
+
+# Dictionary to store user's stock and quantity
+user_portfolio = {}
+
+# Take user input
+print("📊 Welcome to the Stock Portfolio Tracker!")
+print("Available stocks:", ", ".join(stock_prices.keys()))
+
+while True:
+    stock = input("\nEnter the stock symbol (or type 'done' to finish): ").upper()
+    if stock == "DONE":
+        break
+    elif stock in stock_prices:
+        try:
+            quantity = int(input(f"Enter quantity of {stock}: "))
+            if stock in user_portfolio:
+                user_portfolio[stock] += quantity
+            else:
+                user_portfolio[stock] = quantity
+        except ValueError:
+            print("Please enter a valid number for quantity.")
+    else:
+        print("Stock not found in our list.")
+
+# Calculate total investment
+total_value = 0
+print("\n📈 Your Portfolio Summary:")
+for stock, quantity in user_portfolio.items():
+    price = stock_prices[stock]
+    value = price * quantity
+    total_value += value
+    print(f"{stock} - Quantity: {quantity}, Price: ${price}, Value: ${value}")
+
+print(f"\n💰 Total Investment Value: ${total_value}")
+
+# Optional: Save to a file
+save = input("\nDo you want to save this report to a file? (yes/no): ").lower()
+if save == "yes":
+    with open("portfolio_summary.txt", "w") as file:
+        file.write("Your Portfolio Summary:\n")
+        for stock, quantity in user_portfolio.items():
+            price = stock_prices[stock]
+            value = price * quantity
+            file.write(f"{stock} - Quantity: {quantity}, Price: ${price}, Value: ${value}\n")
+        file.write(f"\nTotal Investment Value: ${total_value}\n")
+    print("📁 Portfolio saved to 'portfolio_summary.txt'")
